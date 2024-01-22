@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+<body>
+  <main class="container mt-3">
+    <div class="card my-4 mx-auto">
+      <div class="card-body m-2 m-md-4">
+        <article class="row">
+            <div class="col-5"><img src="{{ avatar }}" class="img-fluid" alt=""></div>
+
+          <div class="col-7">
+
+            <section class="teacher=info">
+
+              <h1 class="h2">{{ name }}</h1>
+              <p><span class="badge badge-secondary mr-2">{% for goal in goals %} {{ goal }} {% endfor %}</span>Рейтинг: {{ rating }} Ставка: {{ price }} / час</p>
+              <p>{{ about }}</p>
+
+            </section>
+
+            <section class="available">
+
+              <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
+
+              <h6 class="mt-4">Понедельник</h6>
+              {% if true not in  free['mon'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['mon'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='mon', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Вторник</h6>
+              {% if true not in  free['tue'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['tue'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='tue', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Среда</h6>
+              {% if true not in  free['wed'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['wed'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='wed', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Четверг</h6>
+              {% if true not in  free['thu'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['thu'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='thu', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Пятница</h6>
+              {% if true not in  free['fri'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['fri'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='fri', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Суббота</h6>
+              {% if true not in  free['sat'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['sat'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='sat', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <h6 class="mt-4">Воскресенье</h6>
+              {% if true not in  free['sun'].values() %}
+                <p>Нет свободных уроков</p>
+              {% else %}
+                {% for day_key, day_val in free['sun'].items() %}
+                  {% if day_val == true %}
+                    <a href="{{ url_for('booking_view', tutor_id=id, day='sun', time=day_key.split(':')[0] | int) }}" class="btn btn-outline-success mr-2">{{day_key}} свободно  </a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+            </section>
+
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+{% endblock %}
