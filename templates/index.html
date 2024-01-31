@@ -9,9 +9,9 @@
     <div class="text-center mb-5">
       <div class="btn-group mx-auto mb-0" role="group" aria-label="Basic example">
         <a href="{{ url_for('goal_view', goal='travel') }}" class="btn btn-outline-secondary">⛱Для путешествий</a>
-        <a href="goal.html" class="btn btn-outline-secondary">🏫 Для школы</a>
-        <a href="goal.html" class="btn btn-outline-secondary">🏢 Для работы</a>
-        <a href="goal.html" class="btn btn-outline-secondary">🚜 Для переезда</a>
+        <a href="{{ url_for('goal_view', goal='study') }}" class="btn btn-outline-secondary">🏫 Для школы</a>
+        <a href="{{ url_for('goal_view', goal='work') }}" class="btn btn-outline-secondary">🏢 Для работы</a>
+        <a href="{{ url_for('goal_view', goal='relocate') }}" class="btn btn-outline-secondary">🚜 Для переезда</a>
       </div>
     </div>
     <h2 class="h5 text-center mb-5">Наши преподаватели</h2>
@@ -25,7 +25,7 @@
                 <p class="float-right">Рейтинг: 4.8 Ставка: 1200 / час</p>
                 <h2 class="h4">Morris Simmmons</h2>
                 <p>Репетитор американского английского языка. Структурированная система обучения. Всем привет! Я предпочитаю называть себя «тренером» английского языка. Мои занятия похожи на тренировки</p>
-                <a href="profile.html" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информаци и расписание</a>
+                <a href="{{ url_for('profile_view', id='1') }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информаци и расписание</a>
 
               </div>
             </div>
