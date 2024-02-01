@@ -1,9 +1,8 @@
 import json
-
-goal = "study"
+from random import sample
 with open("teacher_db.json", "r", encoding="utf-8") as file:
     data_base = json.load(file)
-    # teacher_name = data_base[0]['name']
-    for profile in data_base:
-        if goal in profile['goals']:
-            print(profile['id'])
+    random_profiles = sample(data_base, 6)
+    for profile in random_profiles:
+        print(profile['name'])
+

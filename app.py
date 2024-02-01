@@ -4,6 +4,7 @@ from flask import Flask, render_template, abort, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, HiddenField, RadioField
 from wtforms.validators import DataRequired
+from random import sample
 
 app = Flask(__name__)
 app.secret_key = "afasfasfaf848a4sf8as41f5a1sf15"
@@ -44,7 +45,10 @@ class RequestForm(FlaskForm):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open("teacher_db.json", "r", encoding="utf-8") as file:
+        data_base = json.load(file)
+        random_profiles = sample(data_base, 6)
+    return render_template('index.html', profiles=random_profiles)
 
 
 # Все репетиторы
