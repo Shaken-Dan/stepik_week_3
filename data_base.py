@@ -1,5 +1,4 @@
 import json
-
 from data import teachers
 
 with open("teacher_db.json", "w", encoding="utf-8") as f:

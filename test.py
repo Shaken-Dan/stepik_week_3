@@ -1,8 +1,18 @@
-import json
-from random import sample
-with open("teacher_db.json", "r", encoding="utf-8") as file:
-    data_base = json.load(file)
-    random_profiles = sample(data_base, 6)
-    for profile in random_profiles:
-        print(profile['name'])
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import os
 
+app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data', 'airports.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Alchemy model for teacher to be written in data_base
+class Teacher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    about = db.Column(db.String)
+    rating = db.Column(db.Float)
+    picture = db.Column(db.String)
+    price = db.Column(db.Integer)

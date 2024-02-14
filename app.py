@@ -5,9 +5,13 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, HiddenField, RadioField
 from wtforms.validators import DataRequired
 from random import sample
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = "afasfasfaf848a4sf8as41f5a1sf15"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 days = {'mon': 'Понедельник',
         'tue': "Persembe",
@@ -17,6 +21,7 @@ days = {'mon': 'Понедельник',
         'sat': "Сенбі",
         'sun': "Воскресенье"
         }
+
 
 
 class UserForm(FlaskForm):
