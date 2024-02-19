@@ -10,6 +10,9 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = "afasfasfaf848a4sf8as41f5a1sf15"
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data', 'test_teacher.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -22,6 +25,46 @@ days = {'mon': 'Понедельник',
         'sun': "Воскресенье"
         }
 
+
+# Reading teacher_db.json data for teachers
+class JsonTeachers:
+    def __init__(self, id):
+        with open("teacher_db.json", "r", encoding="utf-8") as file:
+            data_base = json.load(file)
+            self.name = data_base[id]['name']
+            self.about = data_base[id]['about']
+            self.rating = data_base[id]['rating']
+            self.picture = data_base[id]['picture']
+            self.price = data_base[id]['price']
+            self.goals = data_base[id]['goals']
+            self.free = data_base[id]['free']
+
+
+# Teacher DataBase Model
+class Teacher(db.Model):
+    __tablename__ = 'teachers'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    about = db.Column(db.String, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
+    picture = db.Column(db.String, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    goals = db.Column(db.String, nullable=False)
+    free = db.Column(db.String, nullable=False)
+
+    def set_free_schedule(self, data):
+        """Serialize and set the free schedule data."""
+        self.free = json.dumps(data)
+
+    def set_goals(self, data):
+        self.goals = json.dumps(data)
+
+    def get_free_schedule(self):
+        """Deserialize and return the free schedule data as a dictionary."""
+        return json.loads(self.free) if self.free else {}
+
+    def get_goals(self):
+        return json.loads(self.goals) if self.goals else {}
 
 
 class UserForm(FlaskForm):

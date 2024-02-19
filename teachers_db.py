@@ -18,28 +18,22 @@ class Teacher(db.Model):
     rating = db.Column(db.Float, nullable=False)
     picture = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-
     goals = db.Column(db.String, nullable=False)
-    # How to write to a data-base?
-    free_schedule = db.Column(db.String, nullable=False)
+    free = db.Column(db.String, nullable=False)
 
     def set_free_schedule(self, data):
         """Serialize and set the free schedule data."""
-        self.free_schedule = json.dumps(data)
+        self.free = json.dumps(data)
 
     def set_goals(self, data):
         self.goals = json.dumps(data)
 
     def get_free_schedule(self):
         """Deserialize and return the free schedule data as a dictionary."""
-        return json.loads(self.free_schedule) if self.free_schedule else {}
+        return json.loads(self.free) if self.free else {}
 
     def get_goals(self):
         return json.loads(self.goals) if self.goals else {}
-
-
-def is_name_unique():
-    pass
 
 
 with app.app_context():
@@ -53,21 +47,15 @@ with app.app_context():
         goals = data_base[0]['goals']
         free = data_base[0]['free']
 
-        teacher = Teacher(name=name, about=about, rating=rating, picture=picture, price=price, free_schedule=free)
-        teacher.set_goals(goals)
-        teacher.set_free_schedule(free)
-        db.session.add(teacher)
-        db.session.commit()
+        # Check to avoid double name
+        if Teacher.query.filter_by(name=name).count() == 0:
+            teacher = Teacher(name=name, about=about, rating=rating, picture=picture, price=price, goals=goals,
+                              free=free)
+            teacher.set_goals(goals)
+            teacher.set_free_schedule(free)
 
-        # teacher_to_delete = Teacher.query.filter_by(name="Morris Simmmons").first()
-        #
-        # if teacher_to_delete:
-        #     db.session.delete(teacher_to_delete)
-        #     db.session.commit()
-        #     print("Teacher deleted")
-        # else:
-        #     print("Teacher not exists")
+            db.session.add(teacher)
+            db.session.commit()
+        else:
+            print("Name already exists in data base")
 
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
