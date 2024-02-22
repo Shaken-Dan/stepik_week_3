@@ -51,6 +51,7 @@ class Teacher(db.Model):
     price = db.Column(db.Integer, nullable=False)
     goals = db.Column(db.String, nullable=False)
     free = db.Column(db.String, nullable=False)
+    booking = db.relationship("Booking")
 
     def set_free_schedule(self, data):
         """Serialize and set the free schedule data."""
@@ -65,6 +66,19 @@ class Teacher(db.Model):
 
     def get_goals(self):
         return json.loads(self.goals) if self.goals else {}
+
+
+# One-to-many relationship: Several bookings of one teacher.
+class Booking(db.Model):
+    __tablename__ = "booking"
+    id = db.Column(db.Integer, primary_key=True)
+    teacher_name = db.Column(db.String, nullable=False)
+    booked_time = db.Column(db.String, nullable=False)
+    client_name = db.Coulmn(db.String, nullable=False)
+    client_phone = db.Column(db.Integer, nullable=False)
+
+    teacher_id = db.Column(db.Integer, db.ForeignKey("teachers.id"))
+    teacher = db.relationship("Teacher")
 
 
 class UserForm(FlaskForm):
@@ -224,23 +238,57 @@ def booking_done_view():
     form = UserForm()
     post_in_day = form.clientWeekday.data
     booked_day = ''
+
+    # days dictionary are just below imports
     for key, value in days.items():
         if post_in_day == key:
             booked_day = value
+    # Get inputs from form
+    teacher_id = int(form.clientTeacher.data)
+    teacher_name = JsonTeachers(teacher_id).name
     booked_time = form.clientTime.data + ':00'
     client_name = form.clientName.data
     client_phone = form.clientPhone.data
 
     booking_data = {
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
         "booked_time": booked_time,
         "client_name": client_name,
         "client_phone": client_phone
     }
 
-    with open('booking.json', 'a', encoding='utf-8') as file:
-        json.dump(booking_data, file, indent=4, ensure_ascii=False)
+    """ Keep tracking of booking details by numerating each booking in JSON file """
+    try:
+        # Check if the JSON file exists and is not empty
+        if os.path.exists("booking.json") and os.path.getsize("booking.json") > 0:
+            # Load existing data from the JSON file
+            with open("booking.json", "r", encoding="utf-8") as file_0:
+                data = json.load(file_0)
+        else:
+            # Initialize data as an empty dictionary if the file is empty or doesn't exist
+            data = {}
+
+    except json.decoder.JSONDecodeError:
+        # Handle JSONDecodeError if the file is empty or not properly formatted
+        data = {}
+
+    # Getting last index in booking.json
+    index_booking = max(map(int, data.keys()), default=0) + 1
+
+    # Adding new booking details dictionary to an existing one
+    data[index_booking] = booking_data
+
+    with open('booking.json', 'w', encoding='utf-8') as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
         file.write('\n')
-    flash("Data is recorded")
+
+    """Database connection and writing to it"""
+    with app.app_context():
+        db.create_all()
+        booking_db = Booking(id)
+
+
     return render_template('booking_done.html',
                            booked_day=booked_day,
                            booked_time=booked_time,
